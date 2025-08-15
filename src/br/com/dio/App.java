@@ -155,19 +155,28 @@ public class App {
         
     }
 
+    private static void clearSudoku() {
+        if (isNull(board)) {
+            System.out.println("Nenhum jogo iniciado. Por favor, inicie um novo jogo.");
+            return;
+        }
+
+        System.out.println("Você tem certeza que deseja limpar o Sudoku? (s/n)");
+        var confirmation = scanner.next().toLowerCase();
+        if (confirmation.equals("s")) {
+            board.reset();
+            System.out.println("Sudoku limpo com sucesso!");
+        } else {
+            System.out.println("Operação cancelada. O Sudoku não foi limpo.");
+        }
+        
+    }
+
     private static void finishGame() {
        
     
     }
 
-    private static void clearSudoku() {
-        
-        
-    }
-
-    
-
-    
     
     private static int runUntilGetValidNumber(final int min, final int max){
         var current = scanner.nextInt();
