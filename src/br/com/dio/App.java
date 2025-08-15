@@ -57,6 +57,7 @@ public class App {
         }
 
     }
+
     private static void startGame(final Map<String, String> positions) {
         if (nonNull(board)) {
             System.out.println("Já existe um jogo em andamento. Finalize o jogo atual antes de iniciar um novo.");
@@ -78,12 +79,13 @@ public class App {
         System.out.println("Jogo iniciado com sucesso!");
 
     }
+
     private static void inputNumber() {
         if (isNull(board)) {
             System.out.println("Nenhum jogo iniciado. Por favor, inicie um novo jogo.");
             return;
         }
-        
+
         System.out.println("Digite a coluna em que o numero será colocado (0-8):");
         var column = runUntilGetValidNumber(0, 8);
         System.out.println("Digite a linha em que o numero será colocado (0-8):");
@@ -96,27 +98,45 @@ public class App {
         }
         
     }
+
+    private static void removeNumber() {
+        if (isNull(board)) {
+            System.out.println("Nenhum jogo iniciado. Por favor, inicie um novo jogo.");
+            return;
+        }
+
+        System.out.println("Digite a coluna em que o numero será colocado (0-8):");
+        var column = runUntilGetValidNumber(0, 8);
+        System.out.println("Digite a linha em que o numero será colocado (0-8):");
+        var row = runUntilGetValidNumber(0, 8);
+        System.out.printf("Informe o número que deseja colocar na posição (%s, %s): \n", row, column);
+
+        if (!board.clearValue(column, row)) {
+            System.out.printf("A posição (%s, %s) tem um valor fixo.\n", row, column);
+        }
+
+    }
+
     private static void finishGame() {
        
     
     }
+
     private static void clearSudoku() {
         
         
     }
+
     private static void checkSudokuStatus() {
         
         
     }
+
     private static void showSudoku() {
         
     
     }
-    private static void removeNumber() {
-        
-        
-    }
-
+    
     private static int runUntilGetValidNumber(final int min, final int max){
         var current = scanner.nextInt();
         while (current < min || current > max) {
@@ -127,5 +147,4 @@ public class App {
         return current;
     }
     
-        
 }
