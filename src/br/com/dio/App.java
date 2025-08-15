@@ -1,5 +1,6 @@
 package br.com.dio;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import java.util.ArrayList;
@@ -77,6 +78,24 @@ public class App {
         System.out.println("Jogo iniciado com sucesso!");
 
     }
+    private static void inputNumber() {
+        if (isNull(board)) {
+            System.out.println("Nenhum jogo iniciado. Por favor, inicie um novo jogo.");
+            return;
+        }
+        
+        System.out.println("Digite a coluna em que o numero será colocado (0-8):");
+        var column = runUntilGetValidNumber(0, 8);
+        System.out.println("Digite a linha em que o numero será colocado (0-8):");
+        var row = runUntilGetValidNumber(0, 8);
+        System.out.printf("Informe o número que deseja colocar na posição (%s, %s): \n", row, column);
+        var value = runUntilGetValidNumber(1, 9);
+
+        if (!board.changeValue(column, row, value)) {
+            System.out.printf("A posição (%s, %s) tem um valor fixo.\n", row, column);
+        }
+        
+    }
     private static void finishGame() {
        
     
@@ -97,9 +116,16 @@ public class App {
         
         
     }
-    private static void inputNumber() {
-        
-        
+
+    private static int runUntilGetValidNumber(final int min, final int max){
+        var current = scanner.nextInt();
+        while (current < min || current > max) {
+            System.out.printf("Informe um número válido entre %d e %d: ", min, max);
+            current = scanner.nextInt();
+            
+        }
+        return current;
     }
     
+        
 }
