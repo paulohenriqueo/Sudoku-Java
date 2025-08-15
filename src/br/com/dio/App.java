@@ -26,8 +26,8 @@ public class App {
         
         final var positions = Stream.of(args)
                 .collect(Collectors.toMap(
-                    k -> k.split(";")[0],
-                    v -> v.split(";")[1] 
+                    s -> s.split(";")[0],
+                    s -> s.split(";")[1] 
                 ));
 
         var option = -1;
@@ -68,7 +68,15 @@ public class App {
         for (int i = 0; i < BOARD_LIMIT; i++) {
             spaces.add(new ArrayList<>());
             for (int j = 0; j < BOARD_LIMIT; j++) {
-                var positionConfig = positions.get("%s, %s".formatted(i, j));
+                var key = "%s,%s".formatted(i, j);
+                var positionConfig = positions.get(key);
+
+                if (positionConfig == null) {
+                     System.out.printf("Configuração ausente para a posição (%s, %s). Inicializando como espaço vazio.\n", i, j);
+                    spaces.get(i).add(new Space(0, false)); // ou valores padrão
+                    continue;
+                }
+
                 var expected = Integer.parseInt(positionConfig.split(",")[0]);
                 var fixed = Boolean.parseBoolean(positionConfig.split(",")[1]);
                 var currentSpace = new Space(expected, fixed);
@@ -91,11 +99,11 @@ public class App {
         var column = runUntilGetValidNumber(0, 8);
         System.out.println("Digite a linha em que o numero será colocado (0-8):");
         var row = runUntilGetValidNumber(0, 8);
-        System.out.printf("Informe o número que deseja colocar na posição (%s, %s): \n", row, column);
+        System.out.printf("Informe o número que deseja colocar na posição (%s, %s): \n", column, row);
         var value = runUntilGetValidNumber(1, 9);
 
         if (!board.changeValue(column, row, value)) {
-            System.out.printf("A posição (%s, %s) tem um valor fixo.\n", row, column);
+            System.out.printf("A posição (%s, %s) tem um valor fixo.\n", column, row);
         }
         
     }
@@ -110,10 +118,9 @@ public class App {
         var column = runUntilGetValidNumber(0, 8);
         System.out.println("Digite a linha em que o numero será colocado (0-8):");
         var row = runUntilGetValidNumber(0, 8);
-        System.out.printf("Informe o número que deseja colocar na posição (%s, %s): \n", row, column);
 
         if (!board.clearValue(column, row)) {
-            System.out.printf("A posição (%s, %s) tem um valor fixo.\n", row, column);
+            System.out.printf("A posição (%s, %s) tem um valor fixo.\n", column, row);
         }
 
     }
@@ -129,7 +136,7 @@ public class App {
         for (int i = 0; i < BOARD_LIMIT; i++) {
             for (var column: board.getSpaces()) {
                 
-                args[argPos++] = "" + ((isNull(column.get(i).getActual())) ? " " : column.get(i).getActual());
+                args[argPos++] = " " + ((isNull(column.get(i).getActual())) ? " " : column.get(i).getActual());
 
             }
         }
@@ -145,12 +152,12 @@ public class App {
             return;
         }
 
-        System.out.println("O status do Sudoku é %s" + board.getStatus().getLabel());
+        System.out.println("O status do Sudoku é " + board.getStatus().getLabel());
 
         if (board.hasError()) {
-            System.out.println("Existem erros no Sudoku. Por favor, corrija-os antes de finalizar o jogo.");
+            System.out.println("Existem erros no Sudoku.");
         }else{
-            System.out.println("Parabéns! O Sudoku está completo e sem erros.");
+            System.out.println("O Sudoku não contém erros.");
         }
         
     }
@@ -173,7 +180,21 @@ public class App {
     }
 
     private static void finishGame() {
-       
+       if (isNull(board)) {
+            System.out.println("Nenhum jogo iniciado. Por favor, inicie um novo jogo.");
+            return;
+        }
+
+        if (board.isFinished()) {
+            System.out.println("Parabéns! Você completou o Sudoku.");
+            showSudoku();
+            board.reset();
+        } else if(board.hasError()) {
+            System.out.println("O Sudoku não pode ser finalizado devido a erros. Por favor, corrija os erros antes de finalizar.");
+            
+        }else{
+            System.out.println("O Sudoku ainda não está completo. Por favor preencha todos os espaços.");
+        }
     
     }
 
