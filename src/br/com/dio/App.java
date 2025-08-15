@@ -139,6 +139,22 @@ public class App {
     
     }
 
+    private static void checkSudokuStatus() {
+        if (isNull(board)) {
+            System.out.println("Nenhum jogo iniciado. Por favor, inicie um novo jogo.");
+            return;
+        }
+
+        System.out.println("O status do Sudoku é %s" + board.getStatus().getLabel());
+
+        if (board.hasError()) {
+            System.out.println("Existem erros no Sudoku. Por favor, corrija-os antes de finalizar o jogo.");
+        }else{
+            System.out.println("Parabéns! O Sudoku está completo e sem erros.");
+        }
+        
+    }
+
     private static void finishGame() {
        
     
@@ -149,10 +165,7 @@ public class App {
         
     }
 
-    private static void checkSudokuStatus() {
-        
-        
-    }
+    
 
     
     
