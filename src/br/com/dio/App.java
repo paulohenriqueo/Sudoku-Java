@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 
 import br.com.dio.model.Board;
 import br.com.dio.model.Space;
+import br.com.dio.util.BoardTemplate;
 
 public class App {
 
@@ -117,6 +118,27 @@ public class App {
 
     }
 
+    private static void showSudoku() {
+        if (isNull(board)) {
+            System.out.println("Nenhum jogo iniciado. Por favor, inicie um novo jogo.");
+            return;
+        }
+
+        var args = new Object[81];
+        var argPos = 0;
+        for (int i = 0; i < BOARD_LIMIT; i++) {
+            for (var column: board.getSpaces()) {
+                
+                args[argPos++] = "" + ((isNull(column.get(i).getActual())) ? " " : column.get(i).getActual());
+
+            }
+        }
+
+        System.out.println("Seu Sudoku:");
+        System.out.printf((BoardTemplate.BOARD_TEMPLATE) + "\n", args);
+    
+    }
+
     private static void finishGame() {
        
     
@@ -132,10 +154,7 @@ public class App {
         
     }
 
-    private static void showSudoku() {
-        
     
-    }
     
     private static int runUntilGetValidNumber(final int min, final int max){
         var current = scanner.nextInt();
